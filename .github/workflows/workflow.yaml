@@ -1,5 +1,5 @@
 name : CICD
-on : [pull_request]
+on : [pull_request, push]
 
 jobs:
   continuos-integration:
@@ -11,10 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Using Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 21.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21.x
       - name: run install, build and test
-      run: |
-        npm run build
-        npm run deploy
+        run: |
+          npm run build
+          npm run deploy

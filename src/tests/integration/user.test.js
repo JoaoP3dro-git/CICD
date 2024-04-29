@@ -4,6 +4,7 @@ const User = require('../../models/User');
 
 jest.mock('../../models/User', () => ({
     find: jest.fn(),
+    findById: jest.fn()
 }));
 
 describe('GET /user', () => {
@@ -27,4 +28,23 @@ describe('GET /user', () => {
         expect(res.status).toBe(200);
         expect(res.body.length).toBe(3);
     });
+})
+
+describe('GET /:id', () => {
+    beforeEach(() => {
+        User.findById.mockResolvedValue([
+            { _id: '1', name: 'Queila', lastname: 'Lima', salary: 1234 }
+        ]);
+    });
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+    afterAll(() => {
+        app.close();
+    });
+    it('Deve retornar o status 200 e retornar um usuário', async () => {
+        const res = await request(app).get('/api/user/1');
+        expect(res.status).toBe(200);
+        expect(User.findById).toBeCalled();
+    })
 })
